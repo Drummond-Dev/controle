@@ -4,35 +4,14 @@
 
 @section('content_header')
     <h1>Detalhes da Filial -
-        <strong>
-            @foreach ($companies as $company)
-                @if ($company->id == $branch->company_id)
-                    {{ $company->name }} -
-                @endif
-            @endforeach
-            @foreach ($locations as $location)
-                @if ($location->id == $branch->location_id)
-                    {{ $location->name }}/{{ $location->uf }}
-                @endif
-            @endforeach
-        </strong>
+        <strong>{{ $branch->company->name }} - {{ $branch->location->name }}/{{ $branch->location->uf }}</strong>
     </h1>
 
     <ol class="breadcrumb mt-3">
         <li class="breadcrumb-item" aria-label="Dashboard"><a href="{{ route('home') }}">Dashboard</a></li>
         <li class="breadcrumb-item active" aria-current="page"><a href="{{ route('branch.index') }}">Filiais</a></li>
-        <li class="breadcrumb-item active" aria-current="page">
-            @foreach ($companies as $company)
-                @if ($company->id == $branch->company_id)
-                    {{ $company->name }} -
-                @endif
-            @endforeach
-            @foreach ($locations as $location)
-                @if ($location->id == $branch->location_id)
-                    {{ $location->name }}/{{ $location->uf }}
-                @endif
-            @endforeach
-        </li>
+        <li class="breadcrumb-item active" aria-current="page">{{ $branch->company->name }} -
+            {{ $branch->location->name }}/{{ $branch->location->uf }}</li>
     </ol>
 @stop
 
@@ -41,28 +20,29 @@
         <div class="card-body">
             <ul class="list-group list-group-flush">
                 <li class="list-group-item align-middle"><strong>Compania: </strong>
-                    @foreach ($companies as $company)
-                        @if ($company->id == $branch->company_id)
-                            {{ $company->name }}<img class="float-right" src="{{ url("storage/{$company->image}") }}"
-                                alt="{{ $company->name }}" style="max-width: 60px;">
-                        @endif
-                    @endforeach
+                    {{ $branch->location->name }}<img class="float-right"
+                        src="{{ url("storage/{$branch->company->image}") }}" alt="{{ $branch->company->name }}"
+                        style="max-width: 60px;">
                 </li>
                 <li class="list-group-item"><strong>CNPJ: </strong>{{ $branch->cnpj }}</li>
-                <li class="list-group-item"><strong>Localização: </strong>
-                    @foreach ($locations as $location)
-                        @if ($location->id == $branch->location_id)
-                            {{ $location->name }}/{{ $location->uf }}
-                        @endif
-                    @endforeach
+                <li class="list-group-item"><strong>Localização:</strong>
+                    {{ $branch->location->name }}/{{ $branch->location->uf }}
                 </li>
             </ul>
             <div class="card" style="height: 50vh;overflow-y: auto;">
-                <div class="card-body">
+                <div class="card-header">
                     <h4>Lista de Clientes</h4>
-                    @foreach ($clients as $client)
-                        {{ $client->name }}
-                    @endforeach
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        @foreach ($branch->clients as $client)
+                            <li class="list-group-item align-middle">
+                                {{ $client->name }}
+                                <img class="float-right" src="{{ url("storage/{$client->image}") }}"
+                                    alt="{{ $client->name }}" style="max-width: 60px;">
+                            </li>
+                        @endforeach
+                    </ul>
                 </div>
             </div>
         </div>

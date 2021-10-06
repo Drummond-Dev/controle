@@ -68,19 +68,15 @@ class BranchController extends Controller
      */
     public function show($id)
     {
-        $branch = $this->repository->find($id);
+        $branch = $this->repository->with(['company.branches', 'location', 'clients'])->find($id);
 
-        $clients = $branch->clients;
-        $companies = Company::all();
-        $locations = Location::all();
-
-        dd($clients);
+        // dd($branch->clients);
 
         if (!$branch)
             return redirect()->back();
 
 
-        return view('branch.show', compact('branch', 'companies', 'locations', 'clients'));
+        return view('branch.show', compact('branch'));
     }
 
     /**
