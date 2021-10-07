@@ -74,28 +74,12 @@ class ClientController extends Controller
      */
     public function show($id)
     {
-        $client = $this->repository->find($id);
-
-        $branches = $client->branches;
-
-        $companies = Company::all();
-
-        // dd($companies[0]->id);
-
-        for ($i = 0; $i < count($branches); $i++) {
-            $branch[] = $branches[$i]->pivot->branch_id;
-        }
-
-        for ($i = 0; $i < count($companies); $i++) {
-            $comp[] = $companies[$i]->id;
-        }
-
-        // dd($branch, $comp);
+        $client = $this->repository->with(['branches', 'branches.company', 'branches.location'])->find($id);
 
         if (!$client)
             return redirect()->back();
 
-        return view('client.show', compact('client', 'branches', 'companies'));
+        return view('client.show', compact('client'));
     }
 
     /**

@@ -22,11 +22,22 @@
                 <li class="list-group-item">&nbsp;</li>
             </ul>
             <div class="card" style="height: 80%;">
-                <div class="card-body">
+                <div class="card-header">
                     <h4>Lista de Companias</h4>
+                </div>
+                <div class="card-body">
                     <ul class="list-group list-group-flush">
-                        @foreach ($branches as $branch)
-                            <li class="list-group-item">{{ $branch->pivot->branch_id }}</li>
+                        @foreach ($client->branches as $branch)
+                            <li class="list-group-item align-middle">
+                                <strong>{{ $branch->company->name }}</strong> -
+                                {{ $branch->location->name }}/{{ $branch->location->uf }}
+                                <br />
+                                <strong>CNPJ: </strong>
+                                {{ $branch->cnpj }}
+                                <img class="float-right align-middle"
+                                    src="{{ url("storage/{$branch->company->image}") }}"
+                                    alt="{{ $branch->company->name }}" style="max-width: 60px;">
+                            </li>
                         @endforeach
                     </ul>
                 </div>

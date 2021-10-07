@@ -70,8 +70,6 @@ class BranchController extends Controller
     {
         $branch = $this->repository->with(['company.branches', 'location', 'clients'])->find($id);
 
-        // dd($branch->clients);
-
         if (!$branch)
             return redirect()->back();
 

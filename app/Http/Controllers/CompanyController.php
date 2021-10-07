@@ -49,7 +49,7 @@ class CompanyController extends Controller
     {
         $data = $request->all();
 
-        if($request->image->isValid()) {
+        if ($request->image->isValid()) {
             $nameFile = Str::of($request->name)->slug('-') . '.' . $request->image->getClientOriginalExtension();
 
             $image = $request->image->storeAs('company', $nameFile);
@@ -69,9 +69,12 @@ class CompanyController extends Controller
      */
     public function show($id)
     {
-        $company = $this->repository->find($id);
+        // $company = $this->repository->find($id);
+        $company = $this->repository->with(['branches', 'branches.company', 'branches.location'])->find($id);
 
-        if(! $company)
+        // dd($company);
+
+        if (!$company)
             return redirect()->back();
 
         return view('company.show', compact('company'));
@@ -87,7 +90,7 @@ class CompanyController extends Controller
     {
         $company = $this->repository->find($id);
 
-        if(! $company)
+        if (!$company)
             return redirect()->back();
 
         return view('company.edit', compact('company'));
@@ -104,13 +107,13 @@ class CompanyController extends Controller
     {
         $company = $this->repository->find($id);
 
-        if(! $company)
+        if (!$company)
             return redirect()->back();
 
         $data = $request->all();
 
-        if($request->image && $request->image->isValid()) {
-            if(Storage::exists($company->image))
+        if ($request->image && $request->image->isValid()) {
+            if (Storage::exists($company->image))
                 Storage::delete($company->image);
 
             $nameFile = Str::of($request->name)->slug('-') . '.' . $request->image->getClientOriginalExtension();
@@ -134,10 +137,10 @@ class CompanyController extends Controller
     {
         $company = $this->repository->find($id);
 
-        if(! $company)
+        if (!$company)
             return redirect()->back();
 
-        if(Storage::exists($company->image))
+        if (Storage::exists($company->image))
             Storage::delete($company->image);
 
         $company->delete();
